@@ -1,0 +1,125 @@
+#include <iostream>
+using namespace std;
+
+class Person{
+public:
+    Person(){
+        cout << "Person 默认构造函数" << endl;
+    }
+    Person(int age){
+        Age = age;
+        cout << "Person 有参构造函数" << endl;
+    }
+    Person(const Person &p){
+        // 将传入的人身上的属性传入到我身上
+        Age = p.Age;
+        cout << "Person 拷贝构造函数" << endl;
+    }
+    ~Person(){
+        cout << "Person 析构函数" << endl;
+    }
+    int Age = 0;
+};
+
+void test01(){
+    // 调用
+
+    // 1、括号法
+    Person p1;       // 调用默认构造函数的时候，不要加()，编译器会以为是一个函数声明，不会认为在创建对象
+    Person p2(10);
+    Person p3(p2);
+
+    // 2、显示法
+    Person p4 = Person(10); // 调用有参构造函数
+    Person p5 = Person(p4); // 调用拷贝构造函数
+    Person(10);      // 为一个匿名对象，当前行执行结束后会立即被释放
+    // Person(p5);    //不要利用拷贝构造函数初始化匿名对象，编译器会认为此句为 Person p5;  ,是一个对象声明，会导致重定义错误
+
+    //  3、隐式转换法
+    Person p6 = 10;       // 编译器会隐式转换为 Person p6 = Person(10);  调用有参构造
+    Person p7 = p6;       // 调用拷贝构造函数
+}
+
+void test02(){
+
+}
+int main(){
+    test01();
+    return 0;
+}
+
+
+
+
+
+//
+// Created by Administrator on 2023/7/4.
+//
+
+#include <stdio.h>
+#include <stdlib.h>
+
+#define MAXSTACK 100
+
+typedef char StackElemtype;     // 栈数据类型
+typedef int status;
+
+// 定义一个顺序栈
+typedef struct SqStack{
+    StackElemtype * base;
+    StackElemtype * top;
+    int stackSize;
+}SqStack;
+
+// 栈的初始化
+status initStack(SqStack * S){
+    S->base = (StackElemtype *) malloc(sizeof (StackElemtype) * MAXSTACK);
+    if(!S->base)
+        exit(1);    // 内存分配失败
+    S->top = S->base;     // 栈顶指向栈底
+    S->stackSize = MAXSTACK;
+    return 0;
+}
+
+// 入栈
+status Push(SqStack* S, StackElemtype e){
+    if(S->top - S->base == S->stackSize)
+        return -1;       // 栈满
+    *(S->top++) = e;     // top指向的内存的单元存放e，且top指向下一个内存单元
+    return 0;
+}
+
+// 出栈
+status Pop(SqStack* S, StackElemtype* e){
+    if(S->base == S->top)
+        return -1;      // 栈空
+    *e = *(--(S->top));
+    return 0;
+}
+
+// 判断栈是否为空栈
+status StackEmpty(SqStack* S){
+    if(S->top == S->base)
+        return 1;
+    else
+        return -1;
+}
+
+// 判断栈是否为满栈
+status StackFull(SqStack* S){
+    if(S->top - S->base == S->stackSize)
+        return 1;
+    else
+        return -1;
+}
+
+// 得到栈顶元素
+StackElemtype getTop(SqStack* S){
+    if(!StackEmpty(S))
+        return *(S->top - 1);
+}
+
+
+int main(){
+
+}
